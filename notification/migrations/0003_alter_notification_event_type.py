@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wallet', '0002_alter_wallet_account_number'),
+        ('notification', '0002_initial'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='wallet',
-            name='account_number',
-            field=models.CharField(default='44346538', max_length=10, unique=True),
+            model_name='notification',
+            name='event_type',
+            field=models.CharField(max_length=1000),
         ),
     ]

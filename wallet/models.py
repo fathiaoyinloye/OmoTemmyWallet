@@ -13,8 +13,8 @@ class Wallet(models.Model):
     ("EUR", "Euro"),
     )
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    wallet_number = models.CharField(max_length=10, unique=True)
-    account_number = models.CharField(max_length=10, unique=True, default=generate_account_number())
+    wallet_number = models.CharField(max_length=10, unique=True, primary_key=True)
+    account_number = models.CharField(max_length=10, unique=True, default=generate_account_number)
     updated_at = models.DateTimeField(auto_now=True)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     currency = models.CharField(max_length=10, choices=CURRENCY_CHOICES, default="NGN")
