@@ -52,7 +52,7 @@ class Transaction(models.Model):
 
 
 class Ledger(models.Model):
-    TRANSACTION_TYPE = (
+    ENTRY_TYPE = (
         ("DEBIT", "Debit"),
         ("CREDIT", "Credit"),
     )
@@ -60,6 +60,6 @@ class Ledger(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     balance_after = models.DecimalField(max_digits=10, decimal_places=2)
     wallet = models.ForeignKey(Wallet, on_delete=models.PROTECT, related_name="ledger")
-    entry_type = models.CharField(max_length=6, choices=TRANSACTION_TYPE)
+    entry_type = models.CharField(max_length=6, choices=ENTRY_TYPE)
     created_at = models.DateTimeField(auto_now_add=True)
 

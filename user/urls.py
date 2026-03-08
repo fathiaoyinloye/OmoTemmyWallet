@@ -1,4 +1,6 @@
 from django.urls import path
+
+import wallet
 from .views import register, login
 
 urlpatterns = [
