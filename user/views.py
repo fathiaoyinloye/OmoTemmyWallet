@@ -23,4 +23,5 @@ def login(request):
 
     return Response(
                     serializer.validated_data,
-                    status=status.HTTP_200_OK)
+                    status=status.HTTP_200_OK
+    )

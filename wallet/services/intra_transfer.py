@@ -18,36 +18,35 @@ def wallet_to_wallet_transfer(sender: Wallet, receiver: Wallet, amount: Decimal,
             receiver_wallet = Wallet.objects.select_for_update().get(pk = receiver.pk)
         except Wallet.DoesNotExist:
             raise Exception("receiver wallet does not exist")
-    sender_wallet = Wallet.objects.select_for_update().get(pk=sender.pk)
+        sender_wallet = Wallet.objects.select_for_update().get(pk=sender.pk)
 
-    sender_wallet.balance = sender.balance - amount
-    receiver_wallet.balance = receiver.balance + amount
+        sender_wallet.balance -= amount
+        receiver_wallet.balance += amount
+        sender_wallet.save(update_fields = ['balance'])
+        receiver_wallet.save(update_fields = ['balance'])
 
-
-    tx = Transaction.objects.create(
+        tx = Transaction.objects.create(
         sender = sender,
         receiver = receiver,
         amount = amount,
         transaction_type = 'CREDIT',
-        transaction_status = 'SUCCESS',
+        status = 'SUCCESS',
         description = description,
         idempotent_key = idempotent_key
     )
-    Ledger.objects.create(
+        Ledger.objects.create(
         transaction = tx,
         amount = amount,
-        wallet = receiver_wallet.balance,
+        wallet = receiver_wallet,
         balance_after = receiver_wallet.balance,
-        transaction_type = 'CREDIT',
+        entry_type= 'CREDIT',
     )
 
-    Ledger.objects.create(
+        Ledger.objects.create(
         transaction=tx,
         amount=amount,
-        wallet=sender_wallet.balance,
+        wallet=sender_wallet,
         balance_after=sender_wallet.balance,
-        transaction_type='DEBIT',
+        entry_type="DEBIT"
     )
-
-
     return tx

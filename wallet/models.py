@@ -12,7 +12,7 @@ class Wallet(models.Model):
     ("USD", "Dollar"),
     ("EUR", "Euro"),
     )
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="wallet")
     wallet_number = models.CharField(max_length=10, unique=True, primary_key=True)
     account_number = models.CharField(max_length=10, unique=True, default=generate_account_number)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,7 +23,8 @@ class Wallet(models.Model):
 
 
 
-
+def __str__(self):
+    return f"account number : {self.wallet_number}"
 
 
 class Transaction(models.Model):
@@ -41,13 +42,16 @@ class Transaction(models.Model):
         reference = models.CharField(max_length=10, default=generate_reference)
         amount = models.DecimalField(max_digits=10, decimal_places=2)
         transaction_type = models.CharField(max_length=6, choices=TRANSACTION_TYPE)
-        amount = models.DecimalField(max_digits=10, decimal_places=2)
         sender = models.ForeignKey(Wallet, on_delete=models.PROTECT, related_name="sender")
         receiver = models.ForeignKey(Wallet, on_delete=models.PROTECT, related_name="receiver")
         status = models.CharField(max_length=10, choices=TRANSACTION_STATUS)
         description = models.TextField(blank=True)
         created_at = models.DateTimeField(auto_now_add=True)
-        idempotency_key = models.UUIDField(default=uuid.uuid4, editable=False)
+        idempotent_key = models.UUIDField(default=uuid.uuid4, editable=False)
+
+
+        def __str__(self):
+            return f"sender : {self.sender}, receiver : {self.receiver} "
 
 
 
@@ -62,4 +66,7 @@ class Ledger(models.Model):
     wallet = models.ForeignKey(Wallet, on_delete=models.PROTECT, related_name="ledger")
     entry_type = models.CharField(max_length=6, choices=ENTRY_TYPE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"ledger : {self.transaction}"
 

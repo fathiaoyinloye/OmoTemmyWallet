@@ -1,8 +1,11 @@
 from django.urls import path
 
 import wallet
-from .views import transfer_wallet
+from .views import transfer_wallet, dashboard, deposit_wallet
 
 urlpatterns = [
     path('transfer/', transfer_wallet, name='transfer'),
-]#'854a013c-c765-477b-9538-6541eba7500b'
+    path('dashboard/', dashboard,name='dashboard'),
+    path('deposit/', deposit_wallet, name='deposit'),
+
+]
