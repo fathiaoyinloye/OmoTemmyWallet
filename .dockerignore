@@ -1,0 +1,12 @@
+.venv
+.env
+.gitignore
+.idea
+_pscache_
+*.pyc
+*.pyo
+*.pyd
+
+db.sqlite3
+Dockerfile
+docker-compose.yml
